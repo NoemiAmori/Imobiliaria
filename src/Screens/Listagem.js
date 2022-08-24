@@ -33,6 +33,7 @@ export default class Listagem extends Component {
                     this.state.listaImoveis.map(
                         item => (
                            <ItemImovel 
+                           key={item.id}
                            id={item.id}
                            nome={item.nome}
                            endereco={item.endereco}

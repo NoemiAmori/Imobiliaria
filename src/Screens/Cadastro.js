@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { RNCamera } from "react-native-camera";
+
 import ItemImovel from "../Components/ItemImovel";
 
 import Database from "../Database/Database";
@@ -27,17 +28,55 @@ export default class Cadastro extends Component {
         banco.Inserir(imoveis);
     }
 
+    takePicture = async () => {
+        if (this.camera) {
+            const options = { quality: 0.5, base64: true };
+            const data = await this.camera.takePictureAsync(options);
+            console.log(data.uri);
+            this.setState({imagem: data.uri})
+        }
+    };
+
     render() {
         return (
-            <View style={styles.container}>
-                <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ nome: valor }) }} placeholder="Digite o nome do imóvel" />
-                <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ endereco: valor }) }} placeholder="Digite o endereço do imóvel" />
-                <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ finalidade: valor }) }} placeholder="Digite a finalidade do imóvel" />
-                <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ tipo: valor }) }} placeholder="Digite o tipo do imóvel" />
-                <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ valor: valor }) }} placeholder="Digite o valor do imóvel" />
+            <ScrollView style={styles.form}>
+                <View style={{ flex: 1 }}>
+                    <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ nome: valor }) }} placeholder="Digite o nome do imóvel" />
+                    <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ endereco: valor }) }} placeholder="Digite o endereço do imóvel" />
+                    <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ finalidade: valor }) }} placeholder="Digite a finalidade do imóvel" />
+                    <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ tipo: valor }) }} placeholder="Digite o tipo do imóvel" />
+                    <TextInput style={styles.txtOpcoes} onChangeText={(valor) => { this.setState({ valor: valor }) }} placeholder="Digite o valor do imóvel" />
+                </View>
+                <View style={styles.container}>
+                    <RNCamera
+                        ref={ref => {
+                            this.camera = ref;
+                        }}
+                        style={styles.preview}
+                        type={RNCamera.Constants.Type.back}
+                        flashMode={RNCamera.Constants.FlashMode.on}
+                        androidCameraPermissionOptions={{
+                            title: 'Permission to use camera',
+                            message: 'We need your permission to use your camera',
+                            buttonPositive: 'Ok',
+                            buttonNegative: 'Cancel',
+                        }}
+                        androidRecordAudioPermissionOptions={{
+                            title: 'Permission to use audio recording',
+                            message: 'We need your permission to use your audio',
+                            buttonPositive: 'Ok',
+                            buttonNegative: 'Cancel',
+                        }}
+                        onGoogleVisionBarcodesDetected={({ barcodes }) => {
+                            console.log(barcodes);
+                        }}
+                    />
+                </View>
 
                 <View style={styles.botao}>
-
+                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                        <Text style={{ fontSize: 14 }}> Tirar Foto </Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => this.CadastrarBanco(this.state.nome, this.state.endereco, this.state.finalidade, this.state.tipo, this.state.valor, this.state.imagem)}>
                         <Text style={styles.cadastro}>CADASTRAR</Text>
@@ -45,8 +84,8 @@ export default class Cadastro extends Component {
 
                 </View>
 
-                <View>
-                    <Text style={{textAlign: 'center'}}> O Imovél será cadastrado com os dados a seguir:</Text>
+                <View style={{ flex: 1 }}>
+                    <Text style={{ textAlign: 'center' }}> O Imovél será cadastrado com os dados a seguir:</Text>
                     <ItemImovel
                         nome={this.state.nome}
                         endereço={this.state.endereco}
@@ -56,17 +95,16 @@ export default class Cadastro extends Component {
                         imagem={this.state.imagem}
                     />
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
+    form: {
         backgroundColor: '#a8edc0',
-        paddingHorizontal: 10
-
+        paddingHorizontal: 10,
+        flex: 1
     },
 
     txtOpcoes: {
@@ -89,6 +127,31 @@ const styles = StyleSheet.create({
     botao: {
         alignItems: 'center',
         justifyContent: 'center',
-        fontWeight: 'bold'
-    }
+        fontWeight: 'bold',
+        flex: 1, 
+        marginTop: 100
+    },
+
+    container: {
+        marginTop: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        height: 50,
+    },
+    preview: {
+        width: 200,
+        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    capture: {
+        flex: 0,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        padding: 15,
+        paddingHorizontal: 20,
+        alignSelf: 'center',
+        margin: 20,
+    },
 })
