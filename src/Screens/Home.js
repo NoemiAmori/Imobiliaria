@@ -1,40 +1,53 @@
 import React, { Component } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, ImageBackground } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 
 export default function Home({ navigation }) {
 
     return (
-        <View>
-            <View style={styles.botao}>
-                <Text style={styles.titulo}>IMOBILIÁRIA - AT 01</Text>
-            </View>
+        <View style={styles.container}>
+            <ImageBackground source={require('../image/imobiliaria.jpg')} style={styles.imageBackground}>
+                
 
-            <Button title="Cadastro" onPress={() => navigation.navigate('Cadastro')} />
-            <Button title="Listagem" onPress={() => navigation.navigate('Listagem')} />
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Cadastro')} >
+                <Text style={{ fontWeight: 'bold', marginTop: 2, color:'black', fontSize: 20}}>Cadastro</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                    onPress={() => navigation.navigate('Listagem')} >
+                <Text style={{ fontWeight: 'bold', marginEnd: 2, color: 'black', fontSize: 20 }}>Listagem</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.titulo}>IMOBILIÁRIA - ATV 01</Text>
+        
+        </ImageBackground>
 
 
-        </View>
+        </View >
+
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: "column",
+    },
 
-    botao: {
-        justifyContent: 'center',
-        alignItems: 'center',
+    imageBackground: {
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     titulo: {
-        
-        backgroundColor: '#0a8cf0',
-        
-        borderRadius: 20,
-        width: 160,
-        padding: 10,
-        margin: 5,
+       
+        padding: 100,
+        marginTop: 80,
         color: 'white',
         fontWeight: 'bold',
-
     },
 
 })

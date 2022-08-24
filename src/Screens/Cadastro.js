@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ItemImovel from "../Components/ItemImovel";
 
 import Database from "../Database/Database";
 import Imovel from "../Models/Imovel";
@@ -14,7 +15,7 @@ export default class Cadastro extends Component {
             finalidade: '****',
             tipo: '****',
             valor: '****',
-            imagem: '****',
+            imagem: '',
         }
 
         //this.CadastrarBanco('Nome', 'Endereço', 'finalidade', 'tipo', 5, 'imagem')
@@ -45,12 +46,15 @@ export default class Cadastro extends Component {
                 </View>
 
                 <View>
-                    <Text> O Imovél será cadastrado com os dados a seguir:</Text>
-                    <Text>Nome: {this.state.nome}</Text>
-                    <Text>Endereço: {this.state.endereco}</Text>
-                    <Text>Finalidade: {this.state.finalidade}</Text>
-                    <Text>Tipo: {this.state.tipo}</Text>
-                    <Text>Valor: {this.state.valor}</Text>
+                    <Text style={{textAlign: 'center'}}> O Imovél será cadastrado com os dados a seguir:</Text>
+                    <ItemImovel
+                        nome={this.state.nome}
+                        endereço={this.state.endereco}
+                        finalidade={this.state.finalidade}
+                        tipo={this.state.tipo}
+                        valor={this.state.valor}
+                        imagem={this.state.imagem}
+                    />
                 </View>
             </View>
         )
@@ -58,16 +62,16 @@ export default class Cadastro extends Component {
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         justifyContent: 'center',
-        backgroundColor:'#a8edc0',
+        backgroundColor: '#a8edc0',
         paddingHorizontal: 10
 
     },
 
-    txtOpcoes:{
-        backgroundColor:'white', 
-        justifyContent:'center',
+    txtOpcoes: {
+        backgroundColor: 'white',
+        justifyContent: 'center',
         margin: 5,
     },
 
@@ -75,10 +79,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#28bf76',
         textAlign: 'center',
         borderRadius: 20,
-        width: 150, 
+        width: 150,
         padding: 10,
         margin: 5,
-        color: 'black', 
+        color: 'black',
         fontWeight: 'bold'
     },
 
